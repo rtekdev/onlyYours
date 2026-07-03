@@ -1,0 +1,444 @@
+{
+  "metadata": {
+    "title": "Only Yours — Your private workspace for notes, secrets and automations",
+    "description": "Only Yours is an open-source self-hosted app for managing notes, encrypted secrets, scenarios and automations."
+  },
+  "common": {
+    "appName": "Only Yours",
+    "tagline": "Your private workspace for notes, secrets, scenarios and automations.",
+    "loading": "Loading…",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "copy": "Copy",
+    "copied": "Copied",
+    "back": "Back",
+    "confirm": "Confirm",
+    "retry": "Try again",
+    "actions": "Actions",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "openMenu": "Open menu",
+    "download": "Download",
+    "done": "Done",
+    "next": "Next",
+    "optional": "optional"
+  },
+  "locale": {
+    "label": "Language",
+    "pl": "Polski",
+    "en": "English"
+  },
+  "landing": {
+    "badge": "Open source · self-hosted",
+    "title": "Yours. Nobody else's.",
+    "subtitle": "Only Yours is a private workspace for notes, encrypted secrets, scenarios and automations — run it locally or on your own hosting.",
+    "cta": "Sign in with Google",
+    "ctaSecondary": "View on GitHub",
+    "features": {
+      "notes": {
+        "title": "Notes",
+        "description": "Quick notes with tags, search and a trash bin. Markdown-friendly."
+      },
+      "vault": {
+        "title": "Secrets vault",
+        "description": "End-to-end encryption in your browser. The server never sees your passwords."
+      },
+      "scenarios": {
+        "title": "Scenarios",
+        "description": "Step-by-step procedures and checklists — from runbooks to travel plans."
+      },
+      "automations": {
+        "title": "Automations",
+        "description": "Create notes and scenarios from templates, call webhooks."
+      }
+    },
+    "security": {
+      "title": "Progressive security",
+      "description": "Google sign-in is enough for everyday work. Critical features require MFA, and the vault additionally requires a local master-password unlock."
+    }
+  },
+  "auth": {
+    "signInTitle": "Sign in to Only Yours",
+    "signInSubtitle": "Use your Google account to enter your private workspace.",
+    "signInWithGoogle": "Continue with Google",
+    "signOut": "Sign out",
+    "error": "Sign-in failed. Please try again.",
+    "sessionNote": "Signing in grants access to notes and scenarios. The vault and security settings additionally require MFA."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "notes": "Notes",
+    "scenarios": "Scenarios",
+    "vault": "Vault",
+    "automations": "Automations",
+    "integrations": "Integrations",
+    "settings": "Settings",
+    "security": "Security"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome": "Hi, {name}!",
+    "welcomeAnonymous": "Welcome back!",
+    "stats": {
+      "notes": "Notes",
+      "scenarios": "Scenarios",
+      "vaultItems": "Vault secrets",
+      "automations": "Automations"
+    },
+    "recentNotes": "Recent notes",
+    "recentScenarios": "Recent scenarios",
+    "emptyRecent": "Nothing here yet.",
+    "quickActions": "Quick actions",
+    "newNote": "New note",
+    "newScenario": "New scenario",
+    "openVault": "Open vault",
+    "securityCard": {
+      "title": "Security status",
+      "mfaOn": "MFA is enabled. Critical features are protected.",
+      "mfaOff": "MFA is not configured. The vault and critical actions are unavailable.",
+      "cta": "Set up MFA"
+    }
+  },
+  "notes": {
+    "title": "Notes",
+    "newNote": "New note",
+    "searchPlaceholder": "Search notes…",
+    "filters": {
+      "active": "Active",
+      "archived": "Archived",
+      "trash": "Trash"
+    },
+    "allTags": "All tags",
+    "editor": {
+      "createTitle": "New note",
+      "editTitle": "Edit note",
+      "titleLabel": "Title",
+      "titlePlaceholder": "E.g. Q3 ideas",
+      "contentLabel": "Content",
+      "contentPlaceholder": "Note content (Markdown welcome)…",
+      "tagsLabel": "Tags",
+      "tagsPlaceholder": "work, ideas",
+      "tagsHint": "Comma-separated, max 10."
+    },
+    "empty": {
+      "title": "No notes",
+      "description": "Start with your first note — everything stays only with you.",
+      "cta": "Create a note"
+    },
+    "emptyFiltered": "Nothing matches your search.",
+    "emptyArchived": "No archived notes.",
+    "emptyTrash": "Trash is empty.",
+    "actions": {
+      "archive": "Archive",
+      "unarchive": "Unarchive",
+      "trash": "Move to trash",
+      "restore": "Restore",
+      "deletePermanently": "Delete permanently"
+    },
+    "confirmDelete": {
+      "title": "Delete this note permanently?",
+      "description": "This cannot be undone."
+    },
+    "updated": "Updated {date}"
+  },
+  "scenarios": {
+    "title": "Scenarios",
+    "newScenario": "New scenario",
+    "empty": {
+      "title": "No scenarios",
+      "description": "A scenario is a procedure or checklist — steps you tick off.",
+      "cta": "Create a scenario"
+    },
+    "status": {
+      "DRAFT": "Draft",
+      "ACTIVE": "Active",
+      "ARCHIVED": "Archived"
+    },
+    "form": {
+      "createTitle": "New scenario",
+      "editTitle": "Edit scenario",
+      "titleLabel": "Title",
+      "titlePlaceholder": "E.g. Production deploy",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "What is this scenario about?"
+    },
+    "steps": {
+      "title": "Steps",
+      "addStep": "Add step",
+      "stepTitlePlaceholder": "What needs to be done?",
+      "notePlaceholder": "Step note (optional)",
+      "empty": "This scenario has no steps yet.",
+      "progress": "{completed} of {total} completed"
+    },
+    "actions": {
+      "duplicate": "Duplicate",
+      "delete": "Delete",
+      "setActive": "Mark as active",
+      "setArchived": "Archive",
+      "setDraft": "Back to draft"
+    },
+    "confirmDelete": {
+      "title": "Delete this scenario?",
+      "description": "All steps will be deleted too. This cannot be undone."
+    }
+  },
+  "vault": {
+    "title": "Vault",
+    "subtitle": "Secrets encrypted in your browser. The server stores only encrypted data.",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
+    "lockNow": "Lock now",
+    "autoLockNote": "The vault locks automatically after {minutes} min of inactivity.",
+    "mfaSetupCard": {
+      "title": "Set up MFA first",
+      "description": "The vault holds your most sensitive data, so it requires multi-factor authentication. Setup takes about 2 minutes.",
+      "cta": "Set up MFA"
+    },
+    "stepUpCard": {
+      "title": "Confirm your identity",
+      "description": "Vault access requires a fresh MFA verification in this session.",
+      "cta": "Verify MFA"
+    },
+    "createCard": {
+      "title": "Create your vault",
+      "description": "Set a master password. An encryption key is derived from it in your browser — it never leaves your device.",
+      "passwordLabel": "Master password",
+      "passwordPlaceholder": "At least 12 characters",
+      "confirmLabel": "Repeat master password",
+      "mismatch": "Passwords do not match.",
+      "tooShort": "The master password must be at least 12 characters long.",
+      "warning": "The master password cannot be recovered. If you lose it, your vault data is gone for good — we have no way to decrypt it.",
+      "cta": "Create vault"
+    },
+    "unlockCard": {
+      "title": "Unlock vault",
+      "description": "Enter your master password to decrypt secrets locally.",
+      "passwordLabel": "Master password",
+      "cta": "Unlock",
+      "wrongPassword": "Wrong master password."
+    },
+    "items": {
+      "add": "Add secret",
+      "empty": {
+        "title": "Vault is empty",
+        "description": "Add your first password or secret. Everything is encrypted before it leaves the browser."
+      },
+      "titleLabel": "Name",
+      "titlePlaceholder": "E.g. GitHub — main account",
+      "usernameLabel": "Username / e-mail",
+      "urlLabel": "URL",
+      "secretLabel": "Password / secret",
+      "notesLabel": "Notes",
+      "generate": "Generate",
+      "reveal": "Reveal",
+      "hide": "Hide",
+      "copySecret": "Copy secret",
+      "copyUsername": "Copy username",
+      "editTitle": "Edit secret",
+      "addTitle": "New secret",
+      "confirmDelete": {
+        "title": "Delete this entry?",
+        "description": "The entry will be permanently removed from the vault."
+      }
+    },
+    "export": {
+      "cta": "Export (encrypted)",
+      "description": "The export contains only encrypted data — the master password is required to read it.",
+      "freshMfa": "Export requires a fresh MFA verification."
+    },
+    "danger": {
+      "title": "Danger zone",
+      "deleteCta": "Delete entire vault",
+      "confirmTitle": "Delete the entire vault?",
+      "confirmDescription": "All secrets will be permanently deleted. This cannot be undone. Fresh MFA verification required.",
+      "freshMfa": "Deleting the vault requires a fresh MFA verification."
+    },
+    "e2eNote": {
+      "title": "End-to-end encryption",
+      "description": "The master password and decrypted secrets exist only in your browser's memory. The server sees encrypted blobs only."
+    }
+  },
+  "mfa": {
+    "setup": {
+      "title": "MFA setup (TOTP)",
+      "intro": "Scan the QR code with your authenticator app (Google Authenticator, Authy, 1Password…), then enter the 6-digit code.",
+      "manualEntry": "Can't scan? Enter the secret manually:",
+      "codeLabel": "Code from the app",
+      "codePlaceholder": "123456",
+      "verify": "Verify and enable",
+      "startError": "Could not start MFA setup.",
+      "backupCodes": {
+        "title": "Backup codes",
+        "description": "Store these codes somewhere safe. Each works only once and you are seeing them for the only time. Use them if you lose access to your authenticator app.",
+        "confirm": "I have saved my backup codes"
+      }
+    },
+    "stepUp": {
+      "title": "MFA verification",
+      "description": "This action requires a second factor.",
+      "freshDescription": "This action requires a fresh verification — enter a code again.",
+      "totpTab": "Authenticator code",
+      "backupTab": "Backup code",
+      "codeLabel": "6-digit code",
+      "backupCodeLabel": "Backup code",
+      "backupCodePlaceholder": "XXXX-XXXX-XXXX",
+      "verify": "Verify"
+    },
+    "errors": {
+      "invalidCode": "Invalid code. Try again.",
+      "locked": "Too many failed attempts. Verification locked for 15 minutes.",
+      "alreadyEnabled": "MFA is already enabled."
+    }
+  },
+  "security": {
+    "title": "Security",
+    "subtitle": "MFA, backup codes and the security event log.",
+    "mfa": {
+      "title": "Multi-factor authentication",
+      "enabled": "MFA enabled",
+      "disabled": "MFA disabled",
+      "enabledAt": "Active since {date}",
+      "enableCta": "Enable MFA",
+      "description": "TOTP codes from an authenticator app protect the vault and critical actions."
+    },
+    "backupCodes": {
+      "title": "Backup codes",
+      "remaining": "{count, plural, =0 {No unused codes left} one {# unused code} other {# unused codes}}",
+      "regenerate": "Generate new codes",
+      "regenerateNote": "New codes invalidate all previous ones. Fresh MFA verification required."
+    },
+    "stepUp": {
+      "title": "Session elevation",
+      "active": "MFA verified — valid until {time}",
+      "none": "No active MFA verification in this session."
+    },
+    "levels": {
+      "title": "Access levels",
+      "session": "Google session — notes, scenarios, automations",
+      "mfa": "MFA — vault, integrations, security settings",
+      "vault": "Local unlock — reading secrets in the browser"
+    },
+    "events": {
+      "title": "Recent security events",
+      "empty": "No events.",
+      "types": {
+        "MFA_SETUP_STARTED": "MFA setup started",
+        "MFA_ENABLED": "MFA enabled",
+        "MFA_VERIFIED": "MFA verified",
+        "MFA_FAILED": "Failed MFA attempt",
+        "MFA_LOCKED": "MFA verification locked",
+        "BACKUP_CODE_USED": "Backup code used",
+        "BACKUP_CODES_REGENERATED": "Backup codes regenerated",
+        "VAULT_CREATED": "Vault created",
+        "VAULT_DATA_ACCESSED": "Encrypted vault data fetched",
+        "VAULT_ITEM_CREATED": "Vault entry added",
+        "VAULT_ITEM_UPDATED": "Vault entry updated",
+        "VAULT_ITEM_DELETED": "Vault entry deleted",
+        "VAULT_EXPORTED": "Vault exported",
+        "VAULT_DELETED": "Vault deleted",
+        "INTEGRATION_CONNECTED": "Integration connected",
+        "INTEGRATION_REMOVED": "Integration removed"
+      }
+    }
+  },
+  "automations": {
+    "title": "Automations",
+    "new": "New automation",
+    "empty": {
+      "title": "No automations",
+      "description": "Automations create notes and scenarios from templates or call webhooks.",
+      "cta": "Create an automation"
+    },
+    "form": {
+      "createTitle": "New automation",
+      "nameLabel": "Name",
+      "namePlaceholder": "E.g. Daily journal",
+      "descriptionLabel": "Description",
+      "triggerLabel": "Trigger",
+      "actionLabel": "Action",
+      "templateHint": "Supported variables: '{'{date}'}', '{'{time}'}', '{'{datetime}'}'."
+    },
+    "triggers": {
+      "MANUAL": "Manual",
+      "SCHEDULE": "Schedule",
+      "WEBHOOK": "Webhook"
+    },
+    "triggerNote": "Schedules and incoming webhooks need a worker/cron — the MVP executes the manual trigger. The data model is already in place.",
+    "actions": {
+      "CREATE_NOTE": "Create note",
+      "CREATE_SCENARIO": "Create scenario",
+      "WEBHOOK": "Call webhook"
+    },
+    "config": {
+      "titleTemplate": "Title template",
+      "contentTemplate": "Content template",
+      "tags": "Tags (comma-separated)",
+      "scenarioTitle": "Scenario title",
+      "scenarioDescription": "Scenario description",
+      "steps": "Steps (one per line)",
+      "url": "URL (https)",
+      "method": "Method",
+      "payload": "JSON payload"
+    },
+    "run": "Run",
+    "lastRun": "Last run: {date}",
+    "neverRun": "Never run yet",
+    "runStatus": {
+      "SUCCESS": "Success",
+      "FAILED": "Failed",
+      "RUNNING": "Running"
+    },
+    "runSuccess": "Automation executed.",
+    "runFailed": "Automation failed.",
+    "confirmDelete": {
+      "title": "Delete this automation?",
+      "description": "Run history will be deleted too."
+    },
+    "invalidJson": "Invalid JSON."
+  },
+  "integrations": {
+    "title": "Integrations",
+    "subtitle": "Connections to external services. Tokens are encrypted at rest and never reach the browser.",
+    "comingSoon": "Coming soon",
+    "mfaNote": "Adding an integration will require MFA verification.",
+    "providers": {
+      "GOOGLE_CALENDAR": {
+        "name": "Google Calendar",
+        "description": "Sync events and create notes from meetings."
+      },
+      "MICROSOFT_CALENDAR": {
+        "name": "Microsoft Calendar",
+        "description": "Sync your Microsoft 365 calendar."
+      }
+    },
+    "status": {
+      "PENDING": "Pending",
+      "CONNECTED": "Connected",
+      "ERROR": "Error",
+      "REVOKED": "Revoked"
+    },
+    "remove": "Disconnect"
+  },
+  "errors": {
+    "UNAUTHENTICATED": "Your session expired. Please sign in again.",
+    "MFA_SETUP_REQUIRED": "This action requires MFA to be configured.",
+    "MFA_REQUIRED": "This action requires MFA verification.",
+    "MFA_LOCKED": "MFA verification is temporarily locked. Try again later.",
+    "INVALID_CODE": "Invalid code.",
+    "VALIDATION": "Invalid form data.",
+    "NOT_FOUND": "Resource not found.",
+    "CONFLICT": "This resource already exists.",
+    "DISABLED": "This feature is disabled.",
+    "INTERNAL": "Something went wrong. Please try again.",
+    "generic": "An unexpected error occurred."
+  },
+  "footer": {
+    "openSource": "Open source under the MIT license",
+    "selfHosted": "Self-hosted — your data stays with you"
+  }
+}

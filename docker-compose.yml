@@ -1,0 +1,25 @@
+# Only Yours — local development database.
+# Usage: docker compose up -d
+# The credentials below are for LOCAL DEVELOPMENT ONLY — never reuse them
+# anywhere public. The matching DATABASE_URL lives in .env.example.
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: only-yours-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: onlyyours
+      POSTGRES_PASSWORD: onlyyours-dev
+      POSTGRES_DB: onlyyours
+    ports:
+      - '5432:5432'
+    volumes:
+      - only-yours-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U onlyyours -d onlyyours']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  only-yours-pgdata:

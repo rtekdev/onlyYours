@@ -1,26 +1,157 @@
 @import "tailwindcss";
 
+/* Only Yours — design tokens. Dark-first, calm, slightly premium.
+   A light theme can be added later by overriding these variables under a
+   `[data-theme="light"]` selector. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
+
+  --background: #0b0c11;
+  --foreground: #e7e9ee;
+  --muted: #9aa0ae;
+  --muted-strong: #c3c8d4;
+
+  --surface: rgba(255, 255, 255, 0.03);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.14);
+
+  --primary: #8b8cf8;
+  --primary-strong: #a5a6ff;
+  --primary-foreground: #101120;
+  --accent: #5eead4;
+
+  --danger: #f87171;
+  --danger-surface: rgba(248, 113, 113, 0.1);
+  --warning: #fbbf24;
+  --warning-surface: rgba(251, 191, 36, 0.1);
+  --success: #4ade80;
+  --success-surface: rgba(74, 222, 128, 0.1);
+
+  --ring: rgba(139, 140, 248, 0.5);
+  --radius: 0.75rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-strong: var(--muted-strong);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-danger: var(--danger);
+  --color-danger-surface: var(--danger-surface);
+  --color-warning: var(--warning);
+  --color-warning-surface: var(--warning-surface);
+  --color-success: var(--success);
+  --color-success-surface: var(--success-surface);
+  --color-ring: var(--ring);
+  --radius-app: var(--radius);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+::selection {
+  background: rgba(139, 140, 248, 0.35);
+}
+
+/* --- Ambient background -----------------------------------------------
+   CSS-only: two blurred radial "auras" drifting very slowly plus a faint
+   grid. Animations use transform only (GPU-composited, no layout work) and
+   are fully disabled for prefers-reduced-motion. Rendered by
+   src/components/layout/ambient-background.tsx, which is the single switch
+   to tone it down or turn it off. */
+
+.ambient-aura {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.ambient-aura-primary {
+  width: 44rem;
+  height: 44rem;
+  top: -14rem;
+  right: -10rem;
+  background: radial-gradient(closest-side, rgba(99, 102, 241, 0.16), transparent 70%);
+  animation: aura-drift-a 46s ease-in-out infinite alternate;
+}
+
+.ambient-aura-accent {
+  width: 38rem;
+  height: 38rem;
+  bottom: -16rem;
+  left: -12rem;
+  background: radial-gradient(closest-side, rgba(45, 212, 191, 0.08), transparent 70%);
+  animation: aura-drift-b 58s ease-in-out infinite alternate;
+}
+
+.ambient-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, black 30%, transparent 75%);
+}
+
+@keyframes aura-drift-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-5rem, 4rem, 0) scale(1.12);
+  }
+}
+
+@keyframes aura-drift-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(4rem, -3rem, 0) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ambient-aura {
+    animation: none;
+  }
+}
+
+/* --- Micro-interactions -------------------------------------------------- */
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-card-enter {
+  animation: card-enter 0.35s cubic-bezier(0.21, 0.47, 0.32, 0.98) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-card-enter {
+    animation: none;
+  }
 }

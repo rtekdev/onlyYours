@@ -1,0 +1,444 @@
+{
+  "metadata": {
+    "title": "Only Yours — Twoja prywatna przestrzeń na notatki, sekrety i automatyzacje",
+    "description": "Only Yours to open-source aplikacja self-hosted do zarządzania notatkami, szyfrowanymi sekretami, scenariuszami i automatyzacjami."
+  },
+  "common": {
+    "appName": "Only Yours",
+    "tagline": "Twoja prywatna przestrzeń na notatki, sekrety, scenariusze i automatyzacje.",
+    "loading": "Wczytywanie…",
+    "save": "Zapisz",
+    "cancel": "Anuluj",
+    "close": "Zamknij",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "create": "Utwórz",
+    "search": "Szukaj",
+    "copy": "Kopiuj",
+    "copied": "Skopiowano",
+    "back": "Wstecz",
+    "confirm": "Potwierdź",
+    "retry": "Spróbuj ponownie",
+    "actions": "Akcje",
+    "enabled": "Włączone",
+    "disabled": "Wyłączone",
+    "openMenu": "Otwórz menu",
+    "download": "Pobierz",
+    "done": "Gotowe",
+    "next": "Dalej",
+    "optional": "opcjonalne"
+  },
+  "locale": {
+    "label": "Język",
+    "pl": "Polski",
+    "en": "English"
+  },
+  "landing": {
+    "badge": "Open source · self-hosted",
+    "title": "Tylko Twoje. Nikogo innego.",
+    "subtitle": "Only Yours to prywatna przestrzeń do notatek, szyfrowanych sekretów, scenariuszy i automatyzacji — uruchamiana lokalnie albo na Twoim własnym hostingu.",
+    "cta": "Zaloguj się przez Google",
+    "ctaSecondary": "Zobacz na GitHubie",
+    "features": {
+      "notes": {
+        "title": "Notatki",
+        "description": "Szybkie notatki z tagami, wyszukiwarką i koszem. Markdown-friendly."
+      },
+      "vault": {
+        "title": "Vault na sekrety",
+        "description": "Szyfrowanie end-to-end w przeglądarce. Serwer nigdy nie widzi Twoich haseł."
+      },
+      "scenarios": {
+        "title": "Scenariusze",
+        "description": "Procedury i checklisty krok po kroku — od runbooków po plany podróży."
+      },
+      "automations": {
+        "title": "Automatyzacje",
+        "description": "Twórz notatki i scenariusze z szablonów, wywołuj webhooki."
+      }
+    },
+    "security": {
+      "title": "Progressive security",
+      "description": "Logowanie Google wystarcza do codziennej pracy. Funkcje krytyczne wymagają MFA, a vault dodatkowo lokalnego odblokowania master hasłem."
+    }
+  },
+  "auth": {
+    "signInTitle": "Zaloguj się do Only Yours",
+    "signInSubtitle": "Użyj konta Google, aby wejść do swojej prywatnej przestrzeni.",
+    "signInWithGoogle": "Kontynuuj z Google",
+    "signOut": "Wyloguj się",
+    "error": "Logowanie nie powiodło się. Spróbuj ponownie.",
+    "sessionNote": "Logowanie daje dostęp do notatek i scenariuszy. Vault i ustawienia bezpieczeństwa wymagają dodatkowo MFA."
+  },
+  "nav": {
+    "dashboard": "Kokpit",
+    "notes": "Notatki",
+    "scenarios": "Scenariusze",
+    "vault": "Vault",
+    "automations": "Automatyzacje",
+    "integrations": "Integracje",
+    "settings": "Ustawienia",
+    "security": "Bezpieczeństwo"
+  },
+  "dashboard": {
+    "title": "Kokpit",
+    "welcome": "Cześć, {name}!",
+    "welcomeAnonymous": "Witaj ponownie!",
+    "stats": {
+      "notes": "Notatki",
+      "scenarios": "Scenariusze",
+      "vaultItems": "Sekrety w vaulcie",
+      "automations": "Automatyzacje"
+    },
+    "recentNotes": "Ostatnie notatki",
+    "recentScenarios": "Ostatnie scenariusze",
+    "emptyRecent": "Jeszcze nic tu nie ma.",
+    "quickActions": "Szybkie akcje",
+    "newNote": "Nowa notatka",
+    "newScenario": "Nowy scenariusz",
+    "openVault": "Otwórz vault",
+    "securityCard": {
+      "title": "Stan bezpieczeństwa",
+      "mfaOn": "MFA jest włączone. Funkcje krytyczne są chronione.",
+      "mfaOff": "MFA nie jest skonfigurowane. Vault i akcje krytyczne są niedostępne.",
+      "cta": "Skonfiguruj MFA"
+    }
+  },
+  "notes": {
+    "title": "Notatki",
+    "newNote": "Nowa notatka",
+    "searchPlaceholder": "Szukaj w notatkach…",
+    "filters": {
+      "active": "Aktywne",
+      "archived": "Zarchiwizowane",
+      "trash": "Kosz"
+    },
+    "allTags": "Wszystkie tagi",
+    "editor": {
+      "createTitle": "Nowa notatka",
+      "editTitle": "Edytuj notatkę",
+      "titleLabel": "Tytuł",
+      "titlePlaceholder": "Np. Pomysły na Q3",
+      "contentLabel": "Treść",
+      "contentPlaceholder": "Treść notatki (Markdown mile widziany)…",
+      "tagsLabel": "Tagi",
+      "tagsPlaceholder": "praca, pomysły",
+      "tagsHint": "Rozdzielaj przecinkami, maks. 10."
+    },
+    "empty": {
+      "title": "Brak notatek",
+      "description": "Zacznij od pierwszej notatki — wszystko zostaje tylko u Ciebie.",
+      "cta": "Utwórz notatkę"
+    },
+    "emptyFiltered": "Nic nie pasuje do wyszukiwania.",
+    "emptyArchived": "Brak zarchiwizowanych notatek.",
+    "emptyTrash": "Kosz jest pusty.",
+    "actions": {
+      "archive": "Archiwizuj",
+      "unarchive": "Przywróć z archiwum",
+      "trash": "Przenieś do kosza",
+      "restore": "Przywróć",
+      "deletePermanently": "Usuń trwale"
+    },
+    "confirmDelete": {
+      "title": "Usunąć notatkę trwale?",
+      "description": "Tej operacji nie można cofnąć."
+    },
+    "updated": "Zaktualizowano {date}"
+  },
+  "scenarios": {
+    "title": "Scenariusze",
+    "newScenario": "Nowy scenariusz",
+    "empty": {
+      "title": "Brak scenariuszy",
+      "description": "Scenariusz to procedura albo checklista — kroki do odhaczenia.",
+      "cta": "Utwórz scenariusz"
+    },
+    "status": {
+      "DRAFT": "Szkic",
+      "ACTIVE": "Aktywny",
+      "ARCHIVED": "Zarchiwizowany"
+    },
+    "form": {
+      "createTitle": "Nowy scenariusz",
+      "editTitle": "Edytuj scenariusz",
+      "titleLabel": "Tytuł",
+      "titlePlaceholder": "Np. Deploy produkcyjny",
+      "descriptionLabel": "Opis",
+      "descriptionPlaceholder": "Czego dotyczy ten scenariusz?"
+    },
+    "steps": {
+      "title": "Kroki",
+      "addStep": "Dodaj krok",
+      "stepTitlePlaceholder": "Co trzeba zrobić?",
+      "notePlaceholder": "Notatka do kroku (opcjonalnie)",
+      "empty": "Ten scenariusz nie ma jeszcze kroków.",
+      "progress": "{completed} z {total} ukończone"
+    },
+    "actions": {
+      "duplicate": "Duplikuj",
+      "delete": "Usuń",
+      "setActive": "Oznacz jako aktywny",
+      "setArchived": "Archiwizuj",
+      "setDraft": "Cofnij do szkicu"
+    },
+    "confirmDelete": {
+      "title": "Usunąć scenariusz?",
+      "description": "Usunięte zostaną też wszystkie kroki. Tej operacji nie można cofnąć."
+    }
+  },
+  "vault": {
+    "title": "Vault",
+    "subtitle": "Sekrety szyfrowane w Twojej przeglądarce. Serwer przechowuje wyłącznie zaszyfrowane dane.",
+    "locked": "Zablokowany",
+    "unlocked": "Odblokowany",
+    "lockNow": "Zablokuj teraz",
+    "autoLockNote": "Vault zablokuje się automatycznie po {minutes} min bezczynności.",
+    "mfaSetupCard": {
+      "title": "Najpierw skonfiguruj MFA",
+      "description": "Vault przechowuje Twoje najbardziej wrażliwe dane, dlatego wymaga uwierzytelniania wieloskładnikowego. Konfiguracja zajmuje ok. 2 minuty.",
+      "cta": "Skonfiguruj MFA"
+    },
+    "stepUpCard": {
+      "title": "Potwierdź tożsamość",
+      "description": "Dostęp do vaulta wymaga świeżej weryfikacji MFA w tej sesji.",
+      "cta": "Zweryfikuj MFA"
+    },
+    "createCard": {
+      "title": "Utwórz swój vault",
+      "description": "Ustaw master hasło. Z niego w przeglądarce zostanie wyprowadzony klucz szyfrujący — nigdy nie opuszcza Twojego urządzenia.",
+      "passwordLabel": "Master hasło",
+      "passwordPlaceholder": "Minimum 12 znaków",
+      "confirmLabel": "Powtórz master hasło",
+      "mismatch": "Hasła nie są identyczne.",
+      "tooShort": "Master hasło musi mieć co najmniej 12 znaków.",
+      "warning": "Master hasła nie da się odzyskać. Jeśli je zgubisz, dane z vaulta będą bezpowrotnie stracone — nie mamy jak ich odszyfrować.",
+      "cta": "Utwórz vault"
+    },
+    "unlockCard": {
+      "title": "Odblokuj vault",
+      "description": "Wpisz master hasło, aby odszyfrować sekrety lokalnie.",
+      "passwordLabel": "Master hasło",
+      "cta": "Odblokuj",
+      "wrongPassword": "Nieprawidłowe master hasło."
+    },
+    "items": {
+      "add": "Dodaj sekret",
+      "empty": {
+        "title": "Vault jest pusty",
+        "description": "Dodaj pierwsze hasło lub sekret. Wszystko zostanie zaszyfrowane zanim opuści przeglądarkę."
+      },
+      "titleLabel": "Nazwa",
+      "titlePlaceholder": "Np. GitHub — konto główne",
+      "usernameLabel": "Login / e-mail",
+      "urlLabel": "Adres URL",
+      "secretLabel": "Hasło / sekret",
+      "notesLabel": "Notatki",
+      "generate": "Generuj",
+      "reveal": "Pokaż",
+      "hide": "Ukryj",
+      "copySecret": "Kopiuj sekret",
+      "copyUsername": "Kopiuj login",
+      "editTitle": "Edytuj sekret",
+      "addTitle": "Nowy sekret",
+      "confirmDelete": {
+        "title": "Usunąć ten wpis?",
+        "description": "Wpis zostanie trwale usunięty z vaulta."
+      }
+    },
+    "export": {
+      "cta": "Eksportuj (zaszyfrowane)",
+      "description": "Eksport zawiera wyłącznie zaszyfrowane dane — do odczytu potrzebne jest master hasło.",
+      "freshMfa": "Eksport wymaga świeżej weryfikacji MFA."
+    },
+    "danger": {
+      "title": "Strefa niebezpieczna",
+      "deleteCta": "Usuń cały vault",
+      "confirmTitle": "Usunąć cały vault?",
+      "confirmDescription": "Wszystkie sekrety zostaną trwale usunięte. Tej operacji nie można cofnąć. Wymagana świeża weryfikacja MFA.",
+      "freshMfa": "Usunięcie vaulta wymaga świeżej weryfikacji MFA."
+    },
+    "e2eNote": {
+      "title": "Szyfrowanie end-to-end",
+      "description": "Master hasło i odszyfrowane sekrety istnieją wyłącznie w pamięci przeglądarki. Serwer widzi tylko zaszyfrowane bloby."
+    }
+  },
+  "mfa": {
+    "setup": {
+      "title": "Konfiguracja MFA (TOTP)",
+      "intro": "Zeskanuj kod QR w aplikacji uwierzytelniającej (Google Authenticator, Authy, 1Password…), a następnie wpisz 6-cyfrowy kod.",
+      "manualEntry": "Nie możesz zeskanować? Wpisz sekret ręcznie:",
+      "codeLabel": "Kod z aplikacji",
+      "codePlaceholder": "123456",
+      "verify": "Zweryfikuj i włącz",
+      "startError": "Nie udało się rozpocząć konfiguracji MFA.",
+      "backupCodes": {
+        "title": "Kody zapasowe",
+        "description": "Zapisz te kody w bezpiecznym miejscu. Każdy działa tylko raz i widzisz je teraz jedyny raz. Użyjesz ich, gdy stracisz dostęp do aplikacji uwierzytelniającej.",
+        "confirm": "Zapisałem/am kody zapasowe"
+      }
+    },
+    "stepUp": {
+      "title": "Weryfikacja MFA",
+      "description": "Ta akcja wymaga potwierdzenia drugim składnikiem.",
+      "freshDescription": "Ta akcja wymaga świeżej weryfikacji — wpisz kod jeszcze raz.",
+      "totpTab": "Kod z aplikacji",
+      "backupTab": "Kod zapasowy",
+      "codeLabel": "6-cyfrowy kod",
+      "backupCodeLabel": "Kod zapasowy",
+      "backupCodePlaceholder": "XXXX-XXXX-XXXX",
+      "verify": "Zweryfikuj"
+    },
+    "errors": {
+      "invalidCode": "Nieprawidłowy kod. Spróbuj ponownie.",
+      "locked": "Za dużo nieudanych prób. Weryfikacja zablokowana na 15 minut.",
+      "alreadyEnabled": "MFA jest już włączone."
+    }
+  },
+  "security": {
+    "title": "Bezpieczeństwo",
+    "subtitle": "MFA, kody zapasowe i dziennik zdarzeń bezpieczeństwa.",
+    "mfa": {
+      "title": "Uwierzytelnianie wieloskładnikowe",
+      "enabled": "MFA włączone",
+      "disabled": "MFA wyłączone",
+      "enabledAt": "Aktywne od {date}",
+      "enableCta": "Włącz MFA",
+      "description": "Kody TOTP z aplikacji uwierzytelniającej chronią vault i akcje krytyczne."
+    },
+    "backupCodes": {
+      "title": "Kody zapasowe",
+      "remaining": "{count, plural, =0 {Brak niewykorzystanych kodów} one {# niewykorzystany kod} few {# niewykorzystane kody} many {# niewykorzystanych kodów} other {# niewykorzystanego kodu}}",
+      "regenerate": "Wygeneruj nowe",
+      "regenerateNote": "Nowe kody unieważniają wszystkie poprzednie. Wymagana świeża weryfikacja MFA."
+    },
+    "stepUp": {
+      "title": "Podniesiony poziom sesji",
+      "active": "MFA zweryfikowane — ważne do {time}",
+      "none": "Brak aktywnej weryfikacji MFA w tej sesji."
+    },
+    "levels": {
+      "title": "Poziomy dostępu",
+      "session": "Sesja Google — notatki, scenariusze, automatyzacje",
+      "mfa": "MFA — vault, integracje, ustawienia bezpieczeństwa",
+      "vault": "Lokalne odblokowanie — odczyt sekretów w przeglądarce"
+    },
+    "events": {
+      "title": "Ostatnie zdarzenia bezpieczeństwa",
+      "empty": "Brak zdarzeń.",
+      "types": {
+        "MFA_SETUP_STARTED": "Rozpoczęto konfigurację MFA",
+        "MFA_ENABLED": "Włączono MFA",
+        "MFA_VERIFIED": "Zweryfikowano MFA",
+        "MFA_FAILED": "Nieudana próba MFA",
+        "MFA_LOCKED": "Zablokowano weryfikację MFA",
+        "BACKUP_CODE_USED": "Użyto kodu zapasowego",
+        "BACKUP_CODES_REGENERATED": "Wygenerowano nowe kody zapasowe",
+        "VAULT_CREATED": "Utworzono vault",
+        "VAULT_DATA_ACCESSED": "Pobrano zaszyfrowane dane vaulta",
+        "VAULT_ITEM_CREATED": "Dodano wpis do vaulta",
+        "VAULT_ITEM_UPDATED": "Zaktualizowano wpis w vaulcie",
+        "VAULT_ITEM_DELETED": "Usunięto wpis z vaulta",
+        "VAULT_EXPORTED": "Wyeksportowano vault",
+        "VAULT_DELETED": "Usunięto vault",
+        "INTEGRATION_CONNECTED": "Połączono integrację",
+        "INTEGRATION_REMOVED": "Usunięto integrację"
+      }
+    }
+  },
+  "automations": {
+    "title": "Automatyzacje",
+    "new": "Nowa automatyzacja",
+    "empty": {
+      "title": "Brak automatyzacji",
+      "description": "Automatyzacje tworzą notatki i scenariusze z szablonów albo wywołują webhooki.",
+      "cta": "Utwórz automatyzację"
+    },
+    "form": {
+      "createTitle": "Nowa automatyzacja",
+      "nameLabel": "Nazwa",
+      "namePlaceholder": "Np. Codzienny dziennik",
+      "descriptionLabel": "Opis",
+      "triggerLabel": "Wyzwalacz",
+      "actionLabel": "Akcja",
+      "templateHint": "Obsługiwane zmienne: '{'{date}'}', '{'{time}'}', '{'{datetime}'}'."
+    },
+    "triggers": {
+      "MANUAL": "Ręczny",
+      "SCHEDULE": "Harmonogram",
+      "WEBHOOK": "Webhook"
+    },
+    "triggerNote": "Harmonogram i webhooki przychodzące wymagają workera/crona — w MVP wykonywany jest wyzwalacz ręczny. Struktura danych jest już gotowa.",
+    "actions": {
+      "CREATE_NOTE": "Utwórz notatkę",
+      "CREATE_SCENARIO": "Utwórz scenariusz",
+      "WEBHOOK": "Wywołaj webhook"
+    },
+    "config": {
+      "titleTemplate": "Szablon tytułu",
+      "contentTemplate": "Szablon treści",
+      "tags": "Tagi (po przecinku)",
+      "scenarioTitle": "Tytuł scenariusza",
+      "scenarioDescription": "Opis scenariusza",
+      "steps": "Kroki (jeden na linię)",
+      "url": "Adres URL (https)",
+      "method": "Metoda",
+      "payload": "Payload JSON"
+    },
+    "run": "Uruchom",
+    "lastRun": "Ostatnie uruchomienie: {date}",
+    "neverRun": "Jeszcze nie uruchomiono",
+    "runStatus": {
+      "SUCCESS": "Sukces",
+      "FAILED": "Błąd",
+      "RUNNING": "W trakcie"
+    },
+    "runSuccess": "Automatyzacja wykonana.",
+    "runFailed": "Automatyzacja zakończyła się błędem.",
+    "confirmDelete": {
+      "title": "Usunąć automatyzację?",
+      "description": "Usunięta zostanie też historia uruchomień."
+    },
+    "invalidJson": "Nieprawidłowy JSON."
+  },
+  "integrations": {
+    "title": "Integracje",
+    "subtitle": "Połączenia z zewnętrznymi usługami. Tokeny są szyfrowane at-rest i nigdy nie trafiają do przeglądarki.",
+    "comingSoon": "Wkrótce",
+    "mfaNote": "Dodanie integracji będzie wymagać weryfikacji MFA.",
+    "providers": {
+      "GOOGLE_CALENDAR": {
+        "name": "Google Calendar",
+        "description": "Synchronizacja wydarzeń i tworzenie notatek ze spotkań."
+      },
+      "MICROSOFT_CALENDAR": {
+        "name": "Microsoft Calendar",
+        "description": "Synchronizacja kalendarza Microsoft 365."
+      }
+    },
+    "status": {
+      "PENDING": "Oczekuje",
+      "CONNECTED": "Połączono",
+      "ERROR": "Błąd",
+      "REVOKED": "Odwołano"
+    },
+    "remove": "Odłącz"
+  },
+  "errors": {
+    "UNAUTHENTICATED": "Sesja wygasła. Zaloguj się ponownie.",
+    "MFA_SETUP_REQUIRED": "Ta akcja wymaga skonfigurowania MFA.",
+    "MFA_REQUIRED": "Ta akcja wymaga weryfikacji MFA.",
+    "MFA_LOCKED": "Weryfikacja MFA jest tymczasowo zablokowana. Spróbuj później.",
+    "INVALID_CODE": "Nieprawidłowy kod.",
+    "VALIDATION": "Nieprawidłowe dane formularza.",
+    "NOT_FOUND": "Nie znaleziono zasobu.",
+    "CONFLICT": "Taki zasób już istnieje.",
+    "DISABLED": "Ta funkcja jest wyłączona.",
+    "INTERNAL": "Coś poszło nie tak. Spróbuj ponownie.",
+    "generic": "Wystąpił nieoczekiwany błąd."
+  },
+  "footer": {
+    "openSource": "Open source na licencji MIT",
+    "selfHosted": "Self-hosted — Twoje dane zostają u Ciebie"
+  }
+}
