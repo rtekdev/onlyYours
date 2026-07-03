@@ -5,13 +5,18 @@ import { NextResponse } from "next/server";
 import { authConfig } from "@/auth.config";
 import { routing } from "@/i18n/routing";
 
-// Next 16 proxy (successor of middleware.ts). Two responsibilities:
+// Request middleware. Two responsibilities:
 //  1. locale negotiation/redirects (next-intl),
 //  2. coarse redirect-to-login for app routes without a session cookie.
 //
 // This is a UX layer only — real authorization happens server-side in every
 // page/action via requireUser()/requireMfa() (see src/lib/security/guards.ts).
 // The adapter-free auth config keeps Prisma out of this bundle.
+//
+// Deliberately the (deprecated) middleware.ts convention, NOT Next 16's
+// proxy.ts: proxy is pinned to the Node runtime, while @opennextjs/cloudflare
+// requires edge middleware — and middleware.ts still builds as edge. Rename
+// back to proxy.ts once OpenNext supports Node middleware on Workers.
 
 const intlMiddleware = createIntlMiddleware(routing);
 const { auth } = NextAuth(authConfig);

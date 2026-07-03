@@ -41,4 +41,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# cloudflare (OpenNext build output, local wrangler state)
+/.open-next/
+/.wrangler/
+
 /src/generated/prisma

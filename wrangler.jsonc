@@ -1,0 +1,25 @@
+// Cloudflare Workers configuration (OpenNext adapter).
+// Secrets (AUTH_SECRET, AUTH_GOOGLE_ID, AUTH_GOOGLE_SECRET, ENCRYPTION_KEY,
+// DATABASE_URL) are NOT set here — configure them with `wrangler secret put`
+// or in the dashboard: Worker → Settings → Variables and Secrets.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "only-yours",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-06-01",
+  // nodejs_compat is required by Next.js, Prisma's generated client and the
+  // `pg` driver (TCP sockets to the Supabase pooler).
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "observability": {
+    "enabled": true
+  },
+  "vars": {
+    // Auth.js derives the canonical URL from request headers when trusted —
+    // this keeps both *.workers.dev and the custom domain working.
+    "AUTH_TRUST_HOST": "true"
+  }
+}

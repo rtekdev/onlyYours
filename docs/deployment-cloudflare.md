@@ -1,67 +1,95 @@
-# Deployment: Cloudflare
+# Deployment: Cloudflare Workers
 
-Only Yours is built to be portable to Cloudflare, but a Node.js host (VPS + Docker, Railway, Fly.io, render.com…) is the zero-friction path today. This page documents both, and exactly what the Cloudflare path requires.
+The repo ships **ready-to-deploy** Cloudflare Workers support via
+[`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare): `wrangler.jsonc`,
+`open-next.config.ts` and the `cf:*` scripts are already configured, and the
+Workers build is verified (`pnpm cf:build`).
 
-## TL;DR
+## Requirements
 
-| Target | Status |
+- Cloudflare account with the **Workers Paid** plan ($5/mo). The bundle is
+  ~3.7 MiB gzipped — over the 3 MiB free-plan limit, comfortably under the
+  10 MiB paid limit.
+- A PostgreSQL reachable from Workers (Supabase pooler works out of the box —
+  `pg` uses its `pg-cloudflare` TCP shim; Hyperdrive is an optional upgrade).
+- `oyours.it` (or your domain) added to Cloudflare for the custom domain.
+
+## What is already configured
+
+| Piece | Where | Notes |
+| --- | --- | --- |
+| Worker config | `wrangler.jsonc` | name `only-yours`, `nodejs_compat`, assets binding, `AUTH_TRUST_HOST` var |
+| OpenNext config | `open-next.config.ts` | no ISR cache backend — every route is dynamic |
+| Scripts | `package.json` | `cf:build`, `cf:preview` (local workerd), `cf:deploy` |
+| Edge middleware | `src/middleware.ts` | deliberately the deprecated `middleware.ts` convention: Next 16's `proxy.ts` is pinned to the Node runtime, which `@opennextjs/cloudflare` does not support yet |
+| pg on Workers | `next.config.ts` + `pg-cloudflare` dep | the shim is loaded conditionally at runtime, so it is force-included via `outputFileTracingIncludes` |
+
+## Deploying from your machine
+
+```bash
+npx wrangler login
+
+# secrets (never put these in wrangler.jsonc):
+npx wrangler secret put AUTH_SECRET
+npx wrangler secret put AUTH_GOOGLE_ID
+npx wrangler secret put AUTH_GOOGLE_SECRET
+npx wrangler secret put ENCRYPTION_KEY
+npx wrangler secret put DATABASE_URL     # Supabase pooled URL (6543, pgbouncer=true)
+
+pnpm cf:deploy
+```
+
+`pnpm cf:preview` runs the exact Workers build locally in workerd before you
+ship it.
+
+## Deploying with Workers Builds (Git integration)
+
+In the Cloudflare dashboard wizard (*Workers → Create → Import a repository*):
+
+| Field | Value |
 | --- | --- |
-| Node server (`pnpm build && pnpm start`) | ✅ works out of the box |
-| Cloudflare **Workers** via `@opennextjs/cloudflare` | ⚠️ supported path, needs a serverless-friendly DB driver + the steps below |
-| Cloudflare Pages (legacy `next-on-pages`) | ❌ not recommended (superseded by OpenNext) |
+| Project name | `only-yours` (must match `name` in `wrangler.jsonc`) |
+| Build command | `pnpm run cf:build` |
+| Deploy command | `npx wrangler deploy` |
+| Non-production branch deploy command | `npx wrangler versions upload` |
+| Path | `/` |
+| API token | create a fresh one from the wizard (needs Workers Scripts edit) |
 
-## Why the code is already Cloudflare-friendly
+No build-time variables are required (`prisma generate` runs via
+`postinstall` and needs no database). After the first deploy, add the runtime
+secrets under *Worker → Settings → Variables and Secrets*: `AUTH_SECRET`,
+`AUTH_GOOGLE_ID`, `AUTH_GOOGLE_SECRET`, `ENCRYPTION_KEY`, `DATABASE_URL`
+(all as **Secret**). Use the **same `ENCRYPTION_KEY` as any existing
+environment** — it decrypts stored TOTP secrets; changing it forces everyone
+to re-enroll MFA. Vault items are unaffected (they are encrypted client-side).
 
-- **JWT sessions** (Auth.js v5) — no per-request DB session lookups; middleware/proxy checks only the cookie.
-- **Prisma 7 driver adapters** — the DB driver is injected in exactly one place (`src/lib/prisma.ts`), so swapping `@prisma/adapter-pg` for a serverless driver is a one-file change.
-- **WebCrypto everywhere** — TOTP (`otpauth`), at-rest encryption and vault crypto use `crypto.subtle`/`crypto.getRandomValues`, not `node:crypto`. All of it runs on Workers.
-- **No filesystem or long-lived process assumptions**; MFA lockout and step-up grants are DB-backed, not in-memory.
+## After the first deploy
 
-## Steps for Cloudflare Workers (OpenNext)
+1. **Google OAuth** — add the production pair in the OAuth client:
+   origin `https://oyours.it` and redirect
+   `https://oyours.it/api/auth/callback/google` (plus the `*.workers.dev`
+   equivalents if you want to test before attaching the domain).
+2. **Custom domain** — *Worker → Settings → Domains & Routes → Add → Custom
+   domain* → `oyours.it`.
+3. **Migrations** — always from your machine or CI, never from the Worker:
+   `pnpm db:deploy` (uses `DIRECT_URL`, see `prisma.config.ts`).
 
-1. **Adapter**
+## Optional: Hyperdrive
 
-   ```bash
-   pnpm add -D @opennextjs/cloudflare wrangler
-   ```
+For lower latency and pooling at Cloudflare's edge, create a Hyperdrive
+config pointing at the Supabase **session pooler (port 5432)**, add the
+binding to `wrangler.jsonc`, and pass
+`env.HYPERDRIVE.connectionString` to `PrismaPg` in `src/lib/prisma.ts`
+(via `getCloudflareContext()` from `@opennextjs/cloudflare`). Not required —
+direct `pg` → Supabase pooler works.
 
-   Follow the current guide: <https://opennext.js.org/cloudflare> (`wrangler.jsonc` with `nodejs_compat`, `opennextjs-cloudflare build && deploy`). Check the OpenNext compatibility matrix against the Next.js 16 minor you are on.
+## Known constraints
 
-2. **Database driver** — pick one:
-   - **Neon**: `@prisma/adapter-neon` (HTTP/WebSocket) — designed for Workers.
-   - **Prisma Accelerate / Prisma Postgres**: `@prisma/client/edge` + Accelerate connection string.
-   - **Cloudflare Hyperdrive** + `@prisma/adapter-pg`: Hyperdrive pools TCP Postgres for Workers; bind it in `wrangler.jsonc` and pass the Hyperdrive connection string.
-
-   In every case the only code change is the adapter construction in `src/lib/prisma.ts`.
-
-3. **Environment / secrets** — set as Worker secrets (never in `wrangler.jsonc` plaintext):
-
-   ```bash
-   wrangler secret put AUTH_SECRET
-   wrangler secret put AUTH_GOOGLE_ID
-   wrangler secret put AUTH_GOOGLE_SECRET
-   wrangler secret put ENCRYPTION_KEY
-   wrangler secret put DATABASE_URL
-   ```
-
-   Plus `AUTH_URL=https://oyours.it` and `AUTH_TRUST_HOST=true` as vars.
-
-4. **Google OAuth** — add the production redirect URI:
-
-   ```txt
-   https://oyours.it/api/auth/callback/google
-   ```
-
-5. **Migrations** — run `pnpm db:deploy` from CI or a local machine against the direct (non-pooled) connection string. Workers never run migrations.
-
-6. **Future schedulers** — `SCHEDULE` automations map naturally to [Cloudflare Cron Triggers](https://developers.cloudflare.com/workers/configuration/cron-triggers/); incoming `WEBHOOK` triggers become a normal route handler. Both are roadmap items; the data model (`Automation`, `AutomationRun`) is ready.
-
-## Known constraints on Workers
-
-- **PBKDF2 at 600k iterations** runs in the *browser* (vault unlock), so Workers CPU limits are irrelevant to it. Server-side crypto here is cheap (AES-GCM, HMAC).
-- **Bundle size**: Prisma’s query compiler (Rust-free client) is Workers-compatible, but watch the 3 MB (free) / 10 MB (paid) compressed limits.
-- **`next/font` + Google Fonts** at build time is fine (fonts are bundled statically).
-- Outbound webhook `fetch` works natively; `AbortSignal.timeout` is supported.
+- **Workers Paid required** (bundle size, see above).
+- `SCHEDULE` automations will map to [Cron Triggers](https://developers.cloudflare.com/workers/configuration/cron-triggers/)
+  when the worker/scheduler lands (roadmap) — the data model is ready.
+- Client-side vault crypto (PBKDF2 600k) runs in the browser, so Workers CPU
+  limits are irrelevant to it.
 
 ## Classic Node deployment (reference)
 
@@ -72,4 +100,6 @@ pnpm build
 pnpm start          # PORT=3000
 ```
 
-Behind a reverse proxy (Caddy/nginx/Traefik) terminate TLS, forward `Host` and `X-Forwarded-*`, and set `AUTH_URL` + `AUTH_TRUST_HOST=true`. Add platform-level rate limiting there (or Cloudflare in front) — see [security.md](security.md).
+Behind a reverse proxy (Caddy/nginx/Traefik) terminate TLS, forward `Host`
+and `X-Forwarded-*`, and set `AUTH_URL` + `AUTH_TRUST_HOST=true`. Add
+platform-level rate limiting there — see [security.md](security.md).
