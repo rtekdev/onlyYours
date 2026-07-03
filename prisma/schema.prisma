@@ -1,0 +1,406 @@
+// Only Yours — Prisma schema
+//
+// Design notes:
+// - Secrets are NEVER stored in plaintext. Vault item payloads arrive at the
+//   server already encrypted (client-side AES-256-GCM); the server only ever
+//   sees ciphertext + IV + KDF parameters.
+// - Server-side secrets that must be readable by the server (TOTP secrets,
+//   future integration tokens) are encrypted at rest with AES-256-GCM using
+//   the ENCRYPTION_KEY environment variable (see src/lib/server/encryption.ts).
+// - Every user-owned table is indexed by userId and queried with an ownership
+//   filter — see src/lib/security/guards.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Auth.js (NextAuth v5) models — https://authjs.dev/getting-started/adapters/prisma
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts            Account[]
+  sessions            Session[]
+  security            UserSecurity?
+  backupCodes         BackupCode[]
+  stepUpGrants        StepUpGrant[]
+  notes               Note[]
+  noteTags            NoteTag[]
+  scenarios           Scenario[]
+  vault               Vault?
+  integrationAccounts IntegrationAccount[]
+  automations         Automation[]
+  securityEvents      SecurityEvent[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+  @@index([userId])
+}
+
+// Kept for Auth.js adapter compatibility. The app uses JWT sessions, so this
+// table stays empty unless the session strategy is switched to "database".
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// ---------------------------------------------------------------------------
+// Progressive security: MFA (TOTP), backup codes, step-up grants
+// ---------------------------------------------------------------------------
+
+model UserSecurity {
+  userId String @id
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // TOTP secret encrypted at rest with the server ENCRYPTION_KEY (AES-256-GCM).
+  // The plaintext secret is only held in memory while verifying a code.
+  totpSecretEnc String?
+  // Set only after the user confirms a valid code — enabling MFA is two-phase.
+  totpEnabledAt DateTime?
+  // Last accepted TOTP time-step, to reject replayed codes within the window.
+  totpLastUsedStep BigInt?
+
+  // Brute-force protection for MFA verification (see security/rate-limit).
+  mfaFailedCount Int       @default(0)
+  mfaLockedUntil DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// One-time recovery codes. Only a keyed hash (HMAC-SHA-256 with a key derived
+// from ENCRYPTION_KEY) is stored — plaintext codes are shown exactly once.
+model BackupCode {
+  id       String    @id @default(cuid())
+  userId   String
+  codeHash String
+  usedAt   DateTime?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, codeHash])
+  @@index([userId])
+}
+
+// Records a successful MFA verification for one browser session (identified
+// by the `sid` claim embedded in the session JWT). Guards compare
+// mfaVerifiedAt against a freshness window per action — this is what makes
+// the security model "progressive" and step-up revocable server-side.
+model StepUpGrant {
+  id            String   @id @default(cuid())
+  userId        String
+  tokenSid      String   @unique
+  mfaVerifiedAt DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Vault — end-to-end encrypted secrets
+// ---------------------------------------------------------------------------
+
+// The server stores only key-derivation parameters and the wrapped (encrypted)
+// vault key. The master password never leaves the browser; a wrong password
+// simply fails AES-GCM authentication client-side.
+model Vault {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  kdfAlgorithm  String // e.g. "PBKDF2-SHA256"
+  kdfIterations Int
+  kdfSalt       String // base64
+  keyWrapIv     String // base64, IV used when wrapping the vault key
+  wrappedKey    String // base64, vault key encrypted with the derived KEK
+
+  items VaultItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// `title` is the only plaintext metadata (needed to render the locked list).
+// Username, URL, secret and notes all live inside the encrypted payload.
+model VaultItem {
+  id      String @id @default(cuid())
+  vaultId String
+  vault   Vault  @relation(fields: [vaultId], references: [id], onDelete: Cascade)
+
+  title      String
+  ciphertext String // base64, AES-256-GCM encrypted JSON payload
+  iv         String // base64, unique per item version
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([vaultId])
+}
+
+// ---------------------------------------------------------------------------
+// Notes
+// ---------------------------------------------------------------------------
+
+model Note {
+  id      String @id @default(cuid())
+  userId  String
+  title   String
+  content String @default("")
+
+  archivedAt DateTime?
+  deletedAt  DateTime? // soft delete — rows are recoverable until purged
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tags NoteTag[]
+
+  @@index([userId, deletedAt])
+  @@index([userId, updatedAt])
+}
+
+model NoteTag {
+  id     String @id @default(cuid())
+  userId String
+  name   String
+
+  createdAt DateTime @default(now())
+
+  user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes Note[]
+
+  @@unique([userId, name])
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Scenarios — procedures / checklists / runbooks
+// ---------------------------------------------------------------------------
+
+enum ScenarioStatus {
+  DRAFT
+  ACTIVE
+  ARCHIVED
+}
+
+model Scenario {
+  id          String         @id @default(cuid())
+  userId      String
+  title       String
+  description String         @default("")
+  status      ScenarioStatus @default(DRAFT)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  steps ScenarioStep[]
+
+  @@index([userId, status])
+}
+
+model ScenarioStep {
+  id         String @id @default(cuid())
+  scenarioId String
+  title      String
+  note       String @default("")
+  position   Int
+
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  scenario Scenario @relation(fields: [scenarioId], references: [id], onDelete: Cascade)
+
+  @@index([scenarioId, position])
+}
+
+// ---------------------------------------------------------------------------
+// Integrations — structure for future providers (Google/Microsoft Calendar…)
+// ---------------------------------------------------------------------------
+
+enum IntegrationProvider {
+  GOOGLE_CALENDAR
+  MICROSOFT_CALENDAR
+}
+
+enum IntegrationStatus {
+  PENDING
+  CONNECTED
+  ERROR
+  REVOKED
+}
+
+// OAuth tokens for integrations are secrets: they are encrypted at rest with
+// the server ENCRYPTION_KEY and must never be logged or returned to clients.
+model IntegrationAccount {
+  id       String              @id @default(cuid())
+  userId   String
+  provider IntegrationProvider
+  status   IntegrationStatus   @default(PENDING)
+
+  accessTokenEnc  String?
+  refreshTokenEnc String?
+  scopes          String?
+  expiresAt       DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, provider])
+  @@index([userId])
+}
+
+// ---------------------------------------------------------------------------
+// Automations — minimal foundation (manual trigger executes in MVP;
+// schedule/webhook triggers are modeled but need a worker/cron — see docs)
+// ---------------------------------------------------------------------------
+
+enum AutomationTrigger {
+  MANUAL
+  SCHEDULE
+  WEBHOOK
+}
+
+enum AutomationAction {
+  CREATE_NOTE
+  CREATE_SCENARIO
+  WEBHOOK
+}
+
+model Automation {
+  id          String  @id @default(cuid())
+  userId      String
+  name        String
+  description String  @default("")
+  enabled     Boolean @default(true)
+
+  triggerType AutomationTrigger @default(MANUAL)
+  actionType  AutomationAction
+  // Validated per actionType with Zod before every run — see
+  // src/lib/validation/automations.ts
+  config      Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  runs AutomationRun[]
+
+  @@index([userId])
+}
+
+enum AutomationRunStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+model AutomationRun {
+  id           String              @id @default(cuid())
+  automationId String
+  status       AutomationRunStatus @default(RUNNING)
+  output       Json?
+  error        String?
+
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+
+  automation Automation @relation(fields: [automationId], references: [id], onDelete: Cascade)
+
+  @@index([automationId, startedAt])
+}
+
+// ---------------------------------------------------------------------------
+// Audit trail for security-relevant actions
+// ---------------------------------------------------------------------------
+
+enum SecurityEventType {
+  MFA_SETUP_STARTED
+  MFA_ENABLED
+  MFA_VERIFIED
+  MFA_FAILED
+  MFA_LOCKED
+  BACKUP_CODE_USED
+  BACKUP_CODES_REGENERATED
+  VAULT_CREATED
+  VAULT_DATA_ACCESSED
+  VAULT_ITEM_CREATED
+  VAULT_ITEM_UPDATED
+  VAULT_ITEM_DELETED
+  VAULT_EXPORTED
+  VAULT_DELETED
+  INTEGRATION_CONNECTED
+  INTEGRATION_REMOVED
+}
+
+model SecurityEvent {
+  id     String            @id @default(cuid())
+  userId String
+  type   SecurityEventType
+
+  ipAddress String?
+  userAgent String?
+  // Never put secrets or plaintext payloads in here.
+  metadata  Json?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+}
